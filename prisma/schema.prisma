@@ -15,6 +15,7 @@ model User {
   tokens    Token[]
   habits    Habit[]
   entries   CheckEntry[]
+  profile   CommunityProfile?
 }
 
 model Token {
@@ -44,4 +45,79 @@ model CheckEntry {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   timestamp DateTime
   outcome   String
+}
+
+model CommunityProfile {
+  id            String                  @id @default(cuid())
+  userId        String?                 @unique
+  user          User?                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name          String
+  level         Int                     @default(1)
+  levelName     String                  @default("Desperto")
+  seed          Boolean                 @default(false)
+  createdAt     DateTime                @default(now())
+
+  posts         CommunityPost[]
+  comments      CommunityComment[]
+  reactions     CommunityReaction[]
+  notifications CommunityNotification[]
+}
+
+model CommunityPost {
+  id            String                  @id @default(cuid())
+  authorId      String
+  author        CommunityProfile        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  anonymous     Boolean                 @default(false)
+  category      String
+  type          String
+  text          String
+  createdAt     DateTime                @default(now())
+
+  comments      CommunityComment[]
+  reactions     CommunityReaction[]
+  notifications CommunityNotification[]
+
+  @@index([createdAt])
+}
+
+model CommunityComment {
+  id              String              @id @default(cuid())
+  postId          String
+  post            CommunityPost       @relation(fields: [postId], references: [id], onDelete: Cascade)
+  parentCommentId String?
+  authorId        String
+  author          CommunityProfile    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  anonymous       Boolean             @default(false)
+  text            String
+  createdAt       DateTime            @default(now())
+  reactions       CommunityReaction[]
+}
+
+model CommunityReaction {
+  id        String            @id @default(cuid())
+  type      String
+  authorId  String
+  author    CommunityProfile  @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  postId    String?
+  post      CommunityPost?    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  commentId String?
+  comment   CommunityComment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  createdAt DateTime          @default(now())
+
+  @@unique([authorId, postId, type])
+  @@unique([authorId, commentId, type])
+}
+
+model CommunityNotification {
+  id          String            @id @default(cuid())
+  recipientId String
+  recipient   CommunityProfile  @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+  title       String
+  body        String
+  postId      String?
+  post        CommunityPost?    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  read        Boolean           @default(false)
+  createdAt   DateTime          @default(now())
+
+  @@index([recipientId, createdAt])
 }

@@ -3,8 +3,17 @@ import argon2 from 'argon2'
 import crypto from 'crypto'
 import prisma from '../lib/prisma.js'
 
+const rateLimitConfig = {
+  config: {
+    rateLimit: {
+      max: 10,
+      timeWindow: '1 minute',
+    },
+  },
+}
+
 export default async function authRoutes(app: FastifyInstance) {
-  app.post('/auth/register', async (req, reply) => {
+  app.post('/auth/register', rateLimitConfig, async (req, reply) => {
     const { username, password } = req.body as { username: string; password: string }
 
     if (!username || !password) {
@@ -30,7 +39,7 @@ export default async function authRoutes(app: FastifyInstance) {
     return reply.status(201).send({ token, username: user.username })
   })
 
-  app.post('/auth/login', async (req, reply) => {
+  app.post('/auth/login', rateLimitConfig, async (req, reply) => {
     const { username, password } = req.body as { username: string; password: string }
 
     if (!username || !password) {

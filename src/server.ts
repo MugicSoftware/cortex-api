@@ -3,6 +3,7 @@ import Fastify from 'fastify'
 import rateLimit from '@fastify/rate-limit'
 import authRoutes from './routes/auth.js'
 import stateRoutes from './routes/state.js'
+import communityRoutes from './routes/community.js'
 
 const app = Fastify({ logger: true })
 
@@ -16,17 +17,18 @@ app.addHook('onRequest', async (req, reply) => {
   }
 })
 
-// Rate limit só nas rotas de auth
+// Rate limit é opt-in por rota (habilitado só em /auth/*)
 await app.register(rateLimit, {
+  global: false,
   max: 10,
   timeWindow: '1 minute',
   keyGenerator: (req) => req.ip,
-  skip: (req) => !req.url.startsWith('/auth'),
 })
 
 // Rotas
 await app.register(authRoutes)
 await app.register(stateRoutes)
+await app.register(communityRoutes)
 
 // Health check
 app.get('/health', async () => ({ ok: true }))
