@@ -46,7 +46,7 @@ const posts: SeedPost[] = [
     id: 'seed_p_1',
     authorId: 'seed_anon',
     anonymous: true,
-    category: 'cigarro',
+    category: 'smoking',
     type: 'pedidoApoio',
     text:
       'Estou com vontade agora depois do almoço. Esse é meu horário mais difícil. Vou tentar esperar 5 minutos antes de decidir.',
@@ -77,7 +77,7 @@ const posts: SeedPost[] = [
   {
     id: 'seed_p_2',
     authorId: 'seed_marina',
-    category: 'redesSociais',
+    category: 'social_media',
     type: 'vitoria',
     text:
       'Ontem deixei o celular fora do quarto e consegui dormir sem rolar feed. Parece pequeno, mas para mim foi uma vitória enorme.',
@@ -101,7 +101,7 @@ const posts: SeedPost[] = [
   {
     id: 'seed_p_3',
     authorId: 'seed_joao',
-    category: 'comida',
+    category: 'food',
     type: 'reflexao',
     text:
       'Percebi que minha vontade de doce aparece mais quando estou cansado, não necessariamente com fome.',
@@ -123,7 +123,7 @@ const posts: SeedPost[] = [
   {
     id: 'seed_p_4',
     authorId: 'seed_ana',
-    category: 'compras',
+    category: 'shopping',
     type: 'estrategia',
     text:
       'Uma coisa que me ajudou foi colocar tudo no carrinho e esperar 24h antes de comprar. Na maioria das vezes a vontade passa.',
@@ -146,7 +146,7 @@ const posts: SeedPost[] = [
   {
     id: 'seed_p_5',
     authorId: 'seed_carlos',
-    category: 'estudos',
+    category: 'studies',
     type: 'vitoria',
     text: 'Consegui estudar 40 minutos sem abrir o celular. O mais difícil foi começar.',
     minutesAgo: 420,
@@ -159,7 +159,7 @@ const posts: SeedPost[] = [
   {
     id: 'seed_p_6',
     authorId: 'seed_joao',
-    category: 'cigarro',
+    category: 'smoking',
     type: 'recomeco',
     text:
       'Hoje eu cedi, mas registrei. Vou tentar não transformar um momento difícil em desistência.',
@@ -188,7 +188,7 @@ const posts: SeedPost[] = [
   {
     id: 'seed_p_7',
     authorId: 'seed_marina',
-    category: 'habitosSaudaveis',
+    category: 'exercise',
     type: 'estrategia',
     text:
       'Deixar a roupa da academia separada na noite anterior diminuiu muito a chance de eu desistir de manhã.',
@@ -203,7 +203,7 @@ const posts: SeedPost[] = [
     id: 'seed_p_8',
     authorId: 'seed_anon',
     anonymous: true,
-    category: 'redesSociais',
+    category: 'social_media',
     type: 'pedidoApoio',
     text: 'Estou tentando não abrir o aplicativo agora. Só precisava escrever isso em algum lugar.',
     minutesAgo: 1080,
@@ -226,7 +226,7 @@ const posts: SeedPost[] = [
   {
     id: 'seed_p_9',
     authorId: 'seed_bruno',
-    category: 'estudos',
+    category: 'studies',
     type: 'reflexao',
     text:
       'Engraçado como quando começo uma tarefa difícil, em 10 minutos a resistência some. O problema é sempre o início.',
@@ -239,7 +239,7 @@ const posts: SeedPost[] = [
   {
     id: 'seed_p_10',
     authorId: 'seed_helena',
-    category: 'habitosSaudaveis',
+    category: 'exercise',
     type: 'vitoria',
     text: 'Sete dias seguidos bebendo água assim que acordo. Pequeno hábito, grande mudança.',
     minutesAgo: 1700,

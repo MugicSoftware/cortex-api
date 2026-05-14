@@ -1,17 +1,9 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import prisma from '../lib/prisma.js'
+import { ALL_CATEGORY_IDS } from './config.js'
 
 const REACTION_TYPES = ['apoio', 'boaPausa', 'vitoria', 'recomeco', 'tamoJunto']
 const POST_TYPES = ['pedidoApoio', 'vitoria', 'reflexao', 'estrategia', 'recomeco']
-const POST_CATEGORIES = [
-  'cigarro',
-  'redesSociais',
-  'comida',
-  'compras',
-  'estudos',
-  'habitosSaudaveis',
-  'outros',
-]
 
 async function getUserFromToken(token: string) {
   const record = await prisma.token.findUnique({
@@ -204,7 +196,7 @@ export default async function communityRoutes(app: FastifyInstance) {
       anonymous?: boolean
     }
     if (!text || !text.trim()) return reply.status(400).send({ error: 'Texto vazio' })
-    if (!category || !POST_CATEGORIES.includes(category))
+    if (!category || !ALL_CATEGORY_IDS.has(category))
       return reply.status(400).send({ error: 'Categoria inválida' })
     if (!type || !POST_TYPES.includes(type))
       return reply.status(400).send({ error: 'Tipo inválido' })

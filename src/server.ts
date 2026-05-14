@@ -4,6 +4,7 @@ import rateLimit from '@fastify/rate-limit'
 import authRoutes from './routes/auth.js'
 import stateRoutes from './routes/state.js'
 import communityRoutes from './routes/community.js'
+import configRoutes from './routes/config.js'
 
 const app = Fastify({ logger: true })
 
@@ -29,6 +30,7 @@ await app.register(rateLimit, {
 await app.register(authRoutes)
 await app.register(stateRoutes)
 await app.register(communityRoutes)
+await app.register(configRoutes)
 
 // Health check
 app.get('/health', async () => ({ ok: true }))
