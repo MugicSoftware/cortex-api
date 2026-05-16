@@ -5,6 +5,7 @@ import authRoutes from './routes/auth.js'
 import stateRoutes from './routes/state.js'
 import communityRoutes from './routes/community.js'
 import configRoutes from './routes/config.js'
+import challengesRoutes from './routes/challenges.js'
 
 const app = Fastify({ logger: true })
 
@@ -31,6 +32,7 @@ await app.register(authRoutes)
 await app.register(stateRoutes)
 await app.register(communityRoutes)
 await app.register(configRoutes)
+await app.register(challengesRoutes)
 
 // Health check
 app.get('/health', async () => ({ ok: true }))

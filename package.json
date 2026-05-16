@@ -8,7 +8,8 @@
     "start": "tsx src/server.ts",
     "db:migrate": "prisma migrate dev",
     "db:generate": "prisma generate",
-    "db:seed": "tsx prisma/seed.ts"
+    "db:seed": "tsx prisma/seed.ts",
+    "db:seed:challenges": "tsx prisma/seed-challenges.ts"
   },
   "keywords": [],
   "author": "",

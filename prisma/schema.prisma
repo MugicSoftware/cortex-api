@@ -8,14 +8,19 @@ datasource db {
 }
 
 model User {
-  id        String       @id @default(cuid())
-  username  String       @unique
+  id        String            @id @default(cuid())
+  username  String            @unique
   hash      String
-  createdAt DateTime     @default(now())
+  createdAt DateTime          @default(now())
   tokens    Token[]
   habits    Habit[]
   entries   CheckEntry[]
   profile   CommunityProfile?
+
+  challengesCreated Challenge[]
+  challengeMembers  ChallengeMember[]
+  challengeMessages ChallengeMessage[]
+  challengeCheckins ChallengeCheckin[]
 }
 
 model Token {
@@ -48,14 +53,14 @@ model CheckEntry {
 }
 
 model CommunityProfile {
-  id            String                  @id @default(cuid())
-  userId        String?                 @unique
-  user          User?                   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  name          String
-  level         Int                     @default(1)
-  levelName     String                  @default("Desperto")
-  seed          Boolean                 @default(false)
-  createdAt     DateTime                @default(now())
+  id        String   @id @default(cuid())
+  userId    String?  @unique
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  level     Int      @default(1)
+  levelName String   @default("Desperto")
+  seed      Boolean  @default(false)
+  createdAt DateTime @default(now())
 
   posts         CommunityPost[]
   comments      CommunityComment[]
@@ -64,14 +69,14 @@ model CommunityProfile {
 }
 
 model CommunityPost {
-  id            String                  @id @default(cuid())
-  authorId      String
-  author        CommunityProfile        @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  anonymous     Boolean                 @default(false)
-  category      String
-  type          String
-  text          String
-  createdAt     DateTime                @default(now())
+  id        String           @id @default(cuid())
+  authorId  String
+  author    CommunityProfile @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  anonymous Boolean          @default(false)
+  category  String
+  type      String
+  text      String
+  createdAt DateTime         @default(now())
 
   comments      CommunityComment[]
   reactions     CommunityReaction[]
@@ -109,15 +114,98 @@ model CommunityReaction {
 }
 
 model CommunityNotification {
-  id          String            @id @default(cuid())
+  id          String           @id @default(cuid())
   recipientId String
-  recipient   CommunityProfile  @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+  recipient   CommunityProfile @relation(fields: [recipientId], references: [id], onDelete: Cascade)
   title       String
   body        String
   postId      String?
-  post        CommunityPost?    @relation(fields: [postId], references: [id], onDelete: Cascade)
-  read        Boolean           @default(false)
-  createdAt   DateTime          @default(now())
+  post        CommunityPost?   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  read        Boolean          @default(false)
+  createdAt   DateTime         @default(now())
 
   @@index([recipientId, createdAt])
+}
+
+model Challenge {
+  id                 String   @id @default(cuid())
+  name               String
+  description        String   @default("")
+  category           String
+  habitType          String // "avoid" | "conquer"
+  visibility         String // "public" | "private"
+  inviteCode         String   @unique
+  startDate          DateTime
+  endDate            DateTime
+  createdByUserId    String?
+  createdBy          User?    @relation(fields: [createdByUserId], references: [id], onDelete: SetNull)
+  collectiveXp       Int      @default(0)
+  groupShieldPercent Int      @default(0)
+  createdAt          DateTime @default(now())
+
+  members  ChallengeMember[]
+  messages ChallengeMessage[]
+  checkins ChallengeCheckin[]
+  daily    ChallengeDailyProgress[]
+
+  @@index([visibility, createdAt])
+}
+
+model ChallengeMember {
+  id                String    @id @default(cuid())
+  challengeId       String
+  challenge         Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  userId            String
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  joinedAt          DateTime  @default(now())
+  xpInChallenge     Int       @default(0)
+  completedDays     Int       @default(0)
+  currentStreak     Int       @default(0)
+  hasCheckedInToday Boolean   @default(false)
+  lastCheckinDate   DateTime?
+
+  @@unique([challengeId, userId])
+  @@index([challengeId])
+}
+
+model ChallengeMessage {
+  id          String    @id @default(cuid())
+  challengeId String
+  challenge   Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  text        String
+  createdAt   DateTime  @default(now())
+
+  @@index([challengeId, createdAt])
+}
+
+model ChallengeCheckin {
+  id          String    @id @default(cuid())
+  challengeId String
+  challenge   Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date        DateTime // dia (truncado à meia-noite UTC)
+  status      String // completed | notDone | stayedFirm | difficultDay
+  xpEarned    Int
+  createdAt   DateTime  @default(now())
+
+  @@unique([challengeId, userId, date])
+  @@index([challengeId, date])
+}
+
+model ChallengeDailyProgress {
+  id                 String    @id @default(cuid())
+  challengeId        String
+  challenge          Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  date               DateTime
+  totalMembers       Int
+  checkedInCount     Int
+  completedCount     Int
+  difficultCount     Int
+  collectiveXpEarned Int       @default(0)
+
+  @@unique([challengeId, date])
+  @@index([challengeId, date])
 }

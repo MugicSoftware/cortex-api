@@ -11,6 +11,7 @@ export const CATEGORY_CONFIG = {
   avoid: [
     { id: 'social_media', label: 'Redes sociais', emoji: '📱' },
     { id: 'smoking', label: 'Cigarro', emoji: '🚬' },
+    { id: 'coffee', label: 'Café', emoji: '☕' },
     { id: 'alcohol', label: 'Álcool', emoji: '🍺' },
     { id: 'sweets', label: 'Doces', emoji: '🍫' },
     { id: 'food', label: 'Comida', emoji: '🍽️' },
